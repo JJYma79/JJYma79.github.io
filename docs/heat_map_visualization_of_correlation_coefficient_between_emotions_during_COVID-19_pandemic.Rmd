@@ -58,7 +58,7 @@ library(here)
 
 <h3>Data Origin</h3>
 &emsp;&emsp;The dataset is sourced from [OSF](https://osf.io/zpfya/), published by users Yochai Shavit, Laura L Carstensen and Jessica Barnes on 24th, Apr 2020.
-&emsp;&emsp;It contains 107 columns and 946 lines entries. I only use 5 columns in my analysis, and the variables descriptions is in my [codebook](./codebook.Rmd).
+&emsp;&emsp;It contains 107 columns and 946 lines entries. I only use 5 columns in my analysis, and the variables descriptions is in my [codebook](https://github.com/JJYma79/JJYma79.github.io/blob/main/docs/codebook.Rmd).
 
 ```{r}
 
