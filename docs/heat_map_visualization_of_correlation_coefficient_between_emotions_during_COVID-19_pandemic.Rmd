@@ -159,3 +159,5 @@ anim_save(filename = "../image/emotions_correlation_heat_map.gif")
 &emsp;&emsp;Carstensen, Laura L, Shavit, Yochai Z, & Barnes, Jessica T. (2020). Age Advantages in Emotional Experience Persist Even Under Threat From the COVID-19 Pandemic. <i>Psychological Science, 31</i>(11), 1374–1385. https://doi.org/10.1177/0956797620967261
 
 &emsp;&emsp;Carstensen, L.L, Turan, B, Scheibe, S, Ram, N, Ersner-Hershfield, H, Samanez-Larkin, G.R, Brooks, K.P, & Nesselroade, J.R. (2011). Emotional experience improves with age: Evidence based on over 10 years of experience sampling. <i>Psychology and Aging, 26</i>(1), 21–33. https://doi.org/10.1037/a0021285
+
+&emsp;&emsp;Jie, Z. (2019). Beautiful Data Visualization with R. Electronic Industry Press.
