@@ -1,0 +1,21 @@
+---
+title: "codebook"
+author: '@Yujie Ma'
+date: "2021/5/23"
+output: html_document
+---
+
+emp_bin = location CP1; emp_bin shows the status of whether people are at work or not. It has two variables, working and not working. This column indicates the employment status of people, and I selected the not working people to see the emotional correlation within these people.
+
+FTP_av= location CQ1; FTP_av is the mean of time horizons, measured by the Future Time Perspective (FTP) scale, helping to understand the emotional experience supported by cognition, such as attention and memory. The scale contains ten statements about people’s subjective perceptions of time. The rate of how accurate each information is for them is between 1-7, whereby higher scores indicate more expansive futures.
+
+avg_f_pos = location CZ1; The avg_f_pos is the mean frequencies scores of positive emotions calculated from 16 positive emotions, including calm, quiet, appreciative, interested, content, happy, relaxed, peaceful, energetic, affectionate, amused, accomplished, joyful, proud, relieved, excited. These emotions were adapted from the study by Carstensen et al. (2011) and designed to vary in valence and arousal level, which is scored between 0-4, in which never is represented by 0 to all or nearly all of the time is coded as 4. 
+
+avg_f_neg= location DA1; The avg_f_neg is the mean frequency scores of negative emotions obtained from 13 negative emotions, including concerns, anxiety/worries, bored, frustrated, irritated, sad, lonely, fearful, angry, disgusted, and guilty embarrassed, ashamed. These emotions were adapted from the study by Carstensen et al. (2011) and designed to vary in valence and arousal level, which is scored between 0-4, in which never is represented by 0 to all or nearly all of the time is coded as 4.
+
+avg_i_pos= location DB1; The avg_i_pos is the mean intensity scores of positive emotions calculated from 16 positive emotions, including calm, quiet, appreciative, interested, content, happy, relaxed, peaceful, energetic, affectionate, amused, accomplished, joyful, proud, relieved, excited. These emotion intensities were adapted from the study by Carstensen et al. (2011) and designed to vary in valence and arousal level, rating from 1 (not at all) to 5 (extremely).  
+
+avg_i_neg= location DC1; The avg_i_neg is the mean intensities of negative emotions obtained from 13 negative emotions, including concerns, anxiety/worries, bored, frustrated, irritated, sad, lonely, fearful, angry, disgusted, guilty, embarrassed, and ashamed. These emotion intensities were adapted from the study by Carstensen et al. (2011) and designed to vary in valence and arousal level, rating from 1 (not at all) to 5 (extremely).
+
+
+

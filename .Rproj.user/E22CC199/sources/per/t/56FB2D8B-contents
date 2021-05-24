@@ -1,0 +1,102 @@
+---
+title: "emotions_correlation_heat_map"
+author: "Jessie"
+date: "2021/5/9"
+output: html_document
+---
+
+
+
+COVID-19 pandemic has rapidly spread across the world and has negatively affected every aspect of human beings, including people's physical health, economic uncertainty, mental health, and so on. Carstensen and her group have investigated the influence of age differences on the frequency and intensity of 29 emotions (16 positives and 13 negatives) during the pandemic on a sample of 945 Americans. They also used Future Time Perspective (FTP) scale to measure the time horizons to understand people's cognitive-oriented emotional experience. As a result, they found that for these people from 18 to 76 years, greater emotional well-being could be affected by age. But as limited social contact and economic uncertainty are important sources for persistent stress for people, I selected them who do not have any of job at present to observe the correlation between the frequency of positive and negative emotions, the intensity of positive and negative emotions, and the time horizons. 
+
+
+
+```{r}
+
+# renv::equip() function will download external software commonly used when compiling R packages from sources,  
+# and instruct R to use that software during compilation
+# renv::equip()
+
+install.packages("tidyverse",repos = "https://cloud.r-project.org/")
+install.packages("ggplot2",repos = "https://cloud.r-project.org/")
+install.packages("RColorBrewer",repos = "https://cloud.r-project.org/")
+install.packages("reshape2",repos = "https://cloud.r-project.org/")
+install.packages("here",repos = "https://cloud.r-project.org/")
+# to help create output files in gif or movie file format
+install.packages("gifski",repos = "https://cloud.r-project.org/")
+install.packages("av",repos = "https://cloud.r-project.org/")
+# this package is for dynamic graph
+install.packages("gganimate",repos = "https://cloud.r-project.org/")
+
+# to save the state of the project library to the lockfile
+# renv::snapshot()
+
+
+# loading the library after you have installed them
+library(tidyverse)
+library(ggplot2)
+library(RColorBrewer)
+library(reshape2)
+# this package is for dynamic graph
+library(gganimate)
+library(here)
+
+# loading the data in the csv file into R 
+df <- read.csv(here("data","AgeAdvantagesEmotionCovid_Data.csv"))
+
+# data wrangling
+# using filter to select the people who do not have jobs at present and choose 5 columns including FTP_av, avg_f_pos, avg_f_neg, avg_i_pos and avg_i_neg
+not_working_df <- df %>% 
+  filter(emp_bin=="Not_working") 
+not_working_df <- not_working_df %>% 
+  select(FTP_av,avg_f_pos,avg_f_neg,avg_i_pos,avg_i_neg)
+
+# renaming the columns to show the exact meaning
+colnames(not_working_df)<-
+  c("time horizons",
+    "positive emotions frequency",
+    "negtive emotions frequency",
+    "positive emotions intensity",
+    "negtive emotions intensity")
+
+# using head to inspect not_working_df
+head(not_working_df)
+
+# plotting dynamic heat map chart
+# computing the correlation between these 5 columns and rounding the values in its first argument to the specified number of decimal places
+# and converting the dataset to a list form
+mat_df <- round(cor(not_working_df), 1)
+mydata_df <- melt(mat_df)
+# renaming the mydata_df columns
+colnames(mydata_df)<-c("emotions1","emotions2","correlation_value")
+#showing mydata_df as a correlation graph
+p <- ggplot(mydata_df, aes(x = emotions1, y = emotions2, fill = correlation_value,label=correlation_value)) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 0.5, vjust = 0.5)) +
+  geom_tile(colour="black") +
+  geom_text(size=3,colour="white")+
+  coord_equal()+
+  scale_fill_gradientn(colours=c(brewer.pal(7,"Set1")[2],"white",brewer.pal(7,"Set1")[1]),na.value=NA)
+
+# making the correlation map into a dynamic graph
+anim <- p + 
+  transition_states(emotions1,
+                    transition_length = 2,
+                    state_length = 1)+ 
+  shadow_mark()+
+  enter_grow()+ enter_fade()+
+  ease_aes('cubic-in-out')  + 
+  ggtitle('Now showing {closest_state}',
+          subtitle = 'Frame {frame} of {nframes}')
+
+# displaying
+anim
+# saving this figure.    
+anim_save(filename = "../image/emotions_correlation_heat_map.gif")
+
+
+
+```
+
+
+
+According to the graph, we can see that a high positive correlation between the frequency and intensity of positive emotions is anticipated as before, r = 0.8. A positive correlation (r = 0.7) between the frequency and intensity of negative emotions is also what I expected. The correlations between positive and negative emotions from these two dimensions are Moderate and negative, with r = -0.6 and r = -0.5 separately. The correlations between time horizons positive emotions from those two dimensions are a surprise, and they are weak correlations with r = 0.3 and r = 0.4 independently. These results are in line with the “positivity effect” in Socioemotional selectivity theory, which claims the cognitive supporting emotionally meaningful goals showed by time horizons may well contribute to improved emotional experience. In this case, the negative correlations (r = -0.1 or r = -0.2) found between time horizons and negative emotions are reasonable, which are no or very weak. However, the selected people are only unemployed without considering their income status, race, gender and so on, the result of my image is very nice, but needs further discussion in the future. For example, some retired elderly people may not have a job, but they have a pension, and others may have fixed source of income without working for employer. 
