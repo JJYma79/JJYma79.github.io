@@ -1,0 +1,161 @@
+---
+title: "heat_map_visualization_of_correlation_coefficient_between_emotions_during_COVID-19_pandemic"
+author: "Yujie Ma-200256708"
+date: "2021/5/9"
+output: html_document
+
+---
+
+
+<center><h2>Introduction</h2></center> 
+<h3>Background</h3>
+<h4>Project motivation</h4>
+
+&emsp;&emsp;In the assessment of PSY6422, I tried to search some open data about the change of people's lives during the CONVID-19 pandemic because the COVID-19 pandemic has rapidly spread across the world and has negatively affected every aspect of human beings, including people's physical health, economic uncertainty, mental health, and so on. Carstensen and her group have investigated the influence of age differences on the frequency and intensity of 29 emotions (16 positives and 13 negatives) during the pandemic on a sample of 945 Americans. They also used Future Time Perspective (FTP) scale to measure the time horizons to understand people's cognitive-oriented emotional experience. As a result, they found that greater emotional well-being could be affected by age for these people from 18 to 76.
+
+&emsp;&emsp;However, limited social contact and economic uncertainty are essential sources of persistent stress for people. Although they have already considered these factors to observe the relationship between age and emotions, they did not show the relationship between those emotions themselves. So I selected those who do not have any job to observe the relationship between the 5 dimensions of different emotions. Specifically, the correlation between the frequency of positive and negative emotions, the intensity of positive and negative emotions, and the time horizons.  
+Programming environment:
+
+<h4>Software environment</h4>
+
+* R version 4.0.3 
+* Integrated development environment: RStudio version 1.4.1103 
+* File type: Rmarkdown
+* Output: html_document 
+* Packages 
+
+```{r,message = FALSE,warning = FALSE}
+
+# renv::equip() function will download external software commonly used when compiling R packages from sources,  
+# and instruct R to use that software during compilation
+# renv::equip()
+
+install.packages("tidyverse",repos = "https://cloud.r-project.org/")
+install.packages("ggplot2",repos = "https://cloud.r-project.org/")
+install.packages("RColorBrewer",repos = "https://cloud.r-project.org/")
+install.packages("reshape2",repos = "https://cloud.r-project.org/")
+install.packages("here",repos = "https://cloud.r-project.org/")
+# to help create output files in gif or movie file format
+install.packages("gifski",repos = "https://cloud.r-project.org/")
+install.packages("av",repos = "https://cloud.r-project.org/")
+# this package is for dynamic graph
+install.packages("gganimate",repos = "https://cloud.r-project.org/")
+
+# to save the state of the project library to the lockfile
+# renv::snapshot()
+
+
+# loading the library after you have installed them
+library(tidyverse)
+library(ggplot2)
+library(RColorBrewer)
+library(reshape2)
+# this package is for dynamic graph
+library(gganimate)
+library(here)
+
+```
+
+<h3>Data Origin</h3>
+&emsp;&emsp;The dataset is sourced from [OSF](https://osf.io/zpfya/), published by users Yochai Shavit, Laura L Carstensen and Jessica Barnes on 24th, Apr 2020.
+&emsp;&emsp;It contains 107 columns and 946 lines entries. I only use 5 columns in my analysis, and the variables descriptions is in my [codebook](./codebook.Rmd).
+
+```{r}
+
+# loading the data in the csv file into R 
+df <- read.csv(here("data","AgeAdvantagesEmotionCovid_Data.csv"))
+
+head(df)
+
+```
+
+<h3>Research Question</h3>
+
+&emsp;&emsp;The correlation coefficient between emotions investigated during the CONVID-19 pandemic
+
+<h3>Method</h3> 
+
+&emsp;&emsp;Pearson product-moment correlation coefficient
+
+<center><h2>Data Preparations and Visualizations</h2></center> 
+
+<h3>Data Preparation</h3>
+
+```{r}
+
+# data wrangling
+# using filter to select the people who do not have jobs at present and choose 5 columns including FTP_av, avg_f_pos, avg_f_neg, avg_i_pos and avg_i_neg
+not_working_df <- df %>% 
+  filter(emp_bin=="Not_working") 
+not_working_df <- not_working_df %>% 
+  select(FTP_av,avg_f_pos,avg_f_neg,avg_i_pos,avg_i_neg)
+
+# renaming the columns to show the exact meaning
+colnames(not_working_df)<-
+  c("time horizons",
+    "positive emotions frequency",
+    "negtive emotions frequency",
+    "positive emotions intensity",
+    "negtive emotions intensity")
+
+# using head to inspect not_working_df
+head(not_working_df)
+
+# plotting dynamic heat map chart
+# computing the correlation between these 5 columns and rounding the values in its first argument to the specified number of decimal places
+# and converting the dataset to a list form
+mat_df <- round(cor(not_working_df), 1)
+mydata_df <- melt(mat_df)
+# renaming the mydata_df columns
+colnames(mydata_df)<-c("emotions1","emotions2","correlation_value")
+
+```
+
+<h3>Results</h3>
+
+```{r}
+
+#showing mydata_df as a correlation graph
+p <- ggplot(mydata_df, aes(x = emotions1, y = emotions2, fill = correlation_value,label=correlation_value)) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 0.5, vjust = 0.5)) +
+  geom_tile(colour="black") +
+  geom_text(size=3,colour="white")+
+  coord_equal()+
+  scale_fill_gradientn(colours=c(brewer.pal(7,"Set1")[2],"white",brewer.pal(7,"Set1")[1]),na.value=NA)
+
+# making the correlation map into a dynamic graph
+anim <- p + 
+  transition_states(emotions1,
+                    transition_length = 2,
+                    state_length = 1)+ 
+  shadow_mark()+
+  enter_grow()+ enter_fade()+
+  ease_aes('cubic-in-out')  + 
+  ggtitle('Now showing {closest_state}',
+          subtitle = 'Frame {frame} of {nframes}')
+
+# displaying
+anim
+# saving this figure.    
+anim_save(filename = "../image/emotions_correlation_heat_map.gif")
+
+```
+
+<h3>Results explanation</h3>
+&emsp;&emsp;According to the graph, we can see that a high positive correlation between the frequency and intensity of positive emotions is anticipated as before, r = 0.8. A positive correlation (r = 0.7) between the frequency and intensity of negative emotions is also what I expected. The correlations between positive and negative emotions from these two dimensions are Moderate and negative, with r = -0.6 and r = -0.5 separately. The correlations between time horizons positive emotions from those two dimensions are a surprise, and they are weak correlations with r = 0.3 and r = 0.4 independently. The negative correlations (r = -0.1 or r = -0.2) found between time horizons and negative emotions are no or very weak.
+
+
+
+<center><h2>Discussion</h2></center>  
+
+&emsp;&emsp;The result is the same as expected. These results are in line with the "positivity effect" in Socioemotional selectivity theory, which claims the cognitive supporting emotionally meaningful goals showed by time horizons may contribute to improved emotional experience. However, the selected people in my visualization are only unemployed. It is believed that people who do not have a job will have a more apparent emotional effect because of social problems. Furthermore, the state of the economy can be another critical factor affecting the emotional state. For example, some people don't work because of retirement, and some people are unemployed because they lose their jobs during the epidemic. Therefore, the emotional scores of people may be different. Thus, the relevant economic variables should be taken into account in later work. In addition, race, gender, age, personality, and so on are also important factors when we want more in-depth research. Apart from that, I also think that appropriate statistical methods will significantly impact a scientific result when these factors above are involved. So the result of my work is charming but needs further discussion in the future. 
+
+<center><h2>Summary</h2></center> 
+
+&emsp;&emsp;This map cleanly, succinctly and vividly shows the relationship between multiple sets of two-dimensional data. It gives us some answers that people have already known as well as unexpected results. However, these results can be observed to a certain extent in our daily life. SP if I have more time and data, I want to visualize some high-dimensional data that are not easy to observe results in life to further understand and demonstrate the power of data visualization.
+
+<center><h2>References</h2></center> 
+
+&emsp;&emsp;Carstensen, Laura L, Shavit, Yochai Z, & Barnes, Jessica T. (2020). Age Advantages in Emotional Experience Persist Even Under Threat From the COVID-19 Pandemic. <i>Psychological Science, 31</i>(11), 1374–1385. https://doi.org/10.1177/0956797620967261
+
+&emsp;&emsp;Carstensen, L.L, Turan, B, Scheibe, S, Ram, N, Ersner-Hershfield, H, Samanez-Larkin, G.R, Brooks, K.P, & Nesselroade, J.R. (2011). Emotional experience improves with age: Evidence based on over 10 years of experience sampling. <i>Psychology and Aging, 26</i>(1), 21–33. https://doi.org/10.1037/a0021285
