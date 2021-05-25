@@ -137,7 +137,7 @@ anim <- p +
 # displaying
 anim
 # saving this figure.    
-anim_save(filename = "../image/emotions_correlation_heat_map.gif")
+anim_save(filename = "./image/emotions_correlation_heat_map.gif")
 
 ```
 
@@ -161,3 +161,7 @@ anim_save(filename = "../image/emotions_correlation_heat_map.gif")
 &emsp;&emsp;Carstensen, L.L, Turan, B, Scheibe, S, Ram, N, Ersner-Hershfield, H, Samanez-Larkin, G.R, Brooks, K.P, & Nesselroade, J.R. (2011). Emotional experience improves with age: Evidence based on over 10 years of experience sampling. <i>Psychology and Aging, 26</i>(1), 21–33. https://doi.org/10.1037/a0021285
 
 &emsp;&emsp;Jie, Z. (2019). Beautiful Data Visualization with R. Electronic Industry Press.
+
+<center><h3><i>Notes</i></h3></center>
+* The GitHub repository for this project could access through [here](https://github.com/JJYma79/JJYma79.github.io)
+
