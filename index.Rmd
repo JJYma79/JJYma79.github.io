@@ -24,22 +24,22 @@ Programming environment:
 * Output: html_document 
 * Packages 
 
-```{r,message = FALSE,warning = FALSE}
+```{r,results = 'hide',message = FALSE,warning = FALSE}
 
 # renv::equip() function will download external software commonly used when compiling R packages from sources,  
 # and instruct R to use that software during compilation
 # renv::equip()
 
-install.packages("tidyverse",repos = "https://cloud.r-project.org/")
-install.packages("ggplot2",repos = "https://cloud.r-project.org/")
-install.packages("RColorBrewer",repos = "https://cloud.r-project.org/")
-install.packages("reshape2",repos = "https://cloud.r-project.org/")
-install.packages("here",repos = "https://cloud.r-project.org/")
+install.packages("tidyverse")
+install.packages("ggplot2")
+install.packages("RColorBrewer")
+install.packages("reshape2")
+install.packages("here")
 # to help create output files in gif or movie file format
-install.packages("gifski",repos = "https://cloud.r-project.org/")
-install.packages("av",repos = "https://cloud.r-project.org/")
+install.packages("gifski")
+install.packages("av")
 # this package is for dynamic graph
-install.packages("gganimate",repos = "https://cloud.r-project.org/")
+install.packages("gganimate")
 
 # to save the state of the project library to the lockfile
 # renv::snapshot()
@@ -60,7 +60,7 @@ library(here)
 &emsp;&emsp;The dataset is sourced from [OSF](https://osf.io/zpfya/), published by users Yochai Shavit, Laura L Carstensen and Jessica Barnes on 24th, Apr 2020.
 &emsp;&emsp;It contains 107 columns and 946 lines entries. I only use 5 columns in my analysis, and the variables descriptions is in my [codebook](https://github.com/JJYma79/JJYma79.github.io/blob/main/docs/codebook.Rmd).
 
-```{r}
+```{r,results = 'hide',message = FALSE,warning = FALSE}
 
 # loading the data in the csv file into R 
 df <- read.csv(here("data","AgeAdvantagesEmotionCovid_Data.csv"))
@@ -81,7 +81,7 @@ head(df)
 
 <h3>Data Preparation</h3>
 
-```{r}
+```{r,results = 'hide',message = FALSE,warning = FALSE}
 
 # data wrangling
 # using filter to select the people who do not have jobs at present and choose 5 columns including FTP_av, avg_f_pos, avg_f_neg, avg_i_pos and avg_i_neg
@@ -113,7 +113,7 @@ colnames(mydata_df)<-c("emotions1","emotions2","correlation_value")
 
 <h3>Results</h3>
 
-```{r}
+```{r,message = FALSE,warning = FALSE}
 
 #showing mydata_df as a correlation graph
 p <- ggplot(mydata_df, aes(x = emotions1, y = emotions2, fill = correlation_value,label=correlation_value)) +
